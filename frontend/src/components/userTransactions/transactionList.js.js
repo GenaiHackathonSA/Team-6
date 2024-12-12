@@ -1,38 +1,30 @@
 import '../../assets/styles/transactionList.css'
 import { Link } from 'react-router-dom';
 
-function TransactionList({ list }) {
+function TransactionList() {
+    const [transactions, setTransactions] = useState([]);
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            const response = await UserService.getTransactions(AuthService.getCurrentUser().email);
+            setTransactions(response.data.response);
+        };
+
+        fetchTransactions();
+    }, []);
 
     return (
-        <>
-            {
-                Object.keys(list).map((date) => (
-                    <div className='t-box' key={date}>
-                        <div className='date'>{formatDate(date)}</div>
-                        <div className='t-list'>
-                            {
-                                list[date].map(t => (
-                                    <Link to={`/user/editTransaction/${t.transactionId}`} className='t-row' key={t.transactionId}>
-                                            <div className='t-row-left'>
-                                                <p>{t.categoryName}</p>
-                                                <p>{t.description}</p>
-                                            </div>
-                                            <div className='t-row-right'>
-                                                <p> {
-                                                        t.transactionType === 1 ? "- " : "+ "
-                                                    }
-                                                    $ {t.amount}</p>
-                                            </div>
-                                    </Link>
-                                ))
-                            }
-                        </div>
-                    </div>
-                ))
-            }
-
-        </>
-    )
+        <div>
+            <h2>Transactions</h2>
+            <ul>
+                {transactions.map(transaction => (
+                    <li key={transaction.id}>
+                        {transaction.description} - {transaction.amount} {transaction.currency} (Converted: {transaction.convertedAmount} USD)
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
 
 function formatDate(dateString) {

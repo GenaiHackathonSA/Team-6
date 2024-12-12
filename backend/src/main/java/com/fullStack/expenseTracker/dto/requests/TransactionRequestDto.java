@@ -21,6 +21,8 @@ public class TransactionRequestDto {
     @NotNull(message = "Description is required!")
     @Size(max = 50, message = "Description can have atmost 50 characters!")
     private String description;
+    @NotNull()
+    private String currency;
 
     @NotNull(message = "Amount is required!")
     private Double amount;

@@ -41,6 +41,11 @@ public class TransactionServiceImpl implements TransactionService {
             throws UserNotFoundException, CategoryNotFoundException, TransactionServiceLogicException {
         Transaction transaction = TransactionRequestDtoToTransaction(transactionRequestDto);
         try {
+            // Convert amount to base currency (e.g., USD)
+            double convertedAmount = convertToBaseCurrency(transactionRequestDto.getAmount(), transactionRequestDto.getCurrency());
+            transaction.setAmount(convertedAmount);
+            transaction.setCurrency("USD"); // Store as base currency
+
             transactionRepository.save(transaction);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ApiResponseDto<>(
@@ -50,11 +55,16 @@ public class TransactionServiceImpl implements TransactionService {
                     )
             );
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             log.error("Error happen when adding new transaction: " + e.getMessage());
             throw new TransactionServiceLogicException("Failed to record your new transaction, Try again later!");
         }
+    }
 
+    private double convertToBaseCurrency(double amount, String currency) {
+        // Fetch conversion rate from Currency Converter API
+        double conversionRate = CurrencyConversionService.getConversionRate(currency, "USD");
+        return amount * conversionRate;
     }
 
     @Override

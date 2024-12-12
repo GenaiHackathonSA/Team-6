@@ -22,6 +22,8 @@ public class Transaction {
     @JoinColumn(name = "userId")
     @JsonIgnore
     private User user;
+    @Column(name = "currency")
+    private String currency;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryId")

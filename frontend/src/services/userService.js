@@ -12,15 +12,17 @@ const get_categories = () => {
     )
 }
 
-const add_transaction = (email, categoryId, descripiton, amount, date) => {
+const add_transaction = (email, categoryId, descripiton, amount, date, currency) => {
+    console.log({ currency })
     return axios.post(
-        API_BASE_URL + '/transaction/new', 
+        API_BASE_URL + '/transaction/new',
         {
             userEmail: email,
             categoryId: categoryId,
-            description:descripiton,
+            description: descripiton,
             amount: amount,
-            date: date 
+            date: date,
+            currency
         },
         {
             headers: AuthService.authHeader()
@@ -30,9 +32,9 @@ const add_transaction = (email, categoryId, descripiton, amount, date) => {
 
 const get_transactions = (email, pageNumber, pageSize, searchKey, sortField, sortDirec, transactionType) => {
     return axios.get(
-        API_BASE_URL + '/transaction/getByUser', 
+        API_BASE_URL + '/transaction/getByUser',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 email: email, pageNumber: pageNumber, pageSize: pageSize, searchKey: searchKey, sortField: sortField, sortDirec: sortDirec, transactionType: transactionType
             }
@@ -42,9 +44,9 @@ const get_transactions = (email, pageNumber, pageSize, searchKey, sortField, sor
 
 const get_single_transaction = (id) => {
     return axios.get(
-        API_BASE_URL + '/transaction/getById', 
+        API_BASE_URL + '/transaction/getById',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 id: id
             }
@@ -52,13 +54,13 @@ const get_single_transaction = (id) => {
     )
 }
 const update_transaction = (transactionId, email, categoryId, descripiton, amount, date) => {
-    return axios.put(API_BASE_URL + '/transaction/update', 
+    return axios.put(API_BASE_URL + '/transaction/update',
         {
             userEmail: email,
             categoryId: categoryId,
-            description:descripiton,
+            description: descripiton,
             amount: amount,
-            date: date 
+            date: date
         },
         {
             headers: AuthService.authHeader(),
@@ -71,9 +73,9 @@ const update_transaction = (transactionId, email, categoryId, descripiton, amoun
 
 const delete_transaction = (id) => {
     return axios.delete(
-        API_BASE_URL + '/transaction/delete', 
+        API_BASE_URL + '/transaction/delete',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 transactionId: id
             }
@@ -83,19 +85,19 @@ const delete_transaction = (id) => {
 
 const settingsResetPassword = async (email, oldPassword, newpassword) => {
     return await axios.post(API_BASE_URL + '/user/settings/changePassword', {
-        email: email, 
+        email: email,
         currentPassword: oldPassword,
         newPassword: newpassword
     }, {
-      headers: AuthService.authHeader(),
+        headers: AuthService.authHeader(),
     })
 }
 
 const getTotalIncomeOrExpense = async (userId, transactionTypeId, month, year) => {
     return axios.get(
-        API_BASE_URL + '/report/getTotalIncomeOrExpense', 
+        API_BASE_URL + '/report/getTotalIncomeOrExpense',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 userId: userId,
                 transactionTypeId: transactionTypeId,
@@ -108,9 +110,9 @@ const getTotalIncomeOrExpense = async (userId, transactionTypeId, month, year) =
 
 const getTotalNoOfTransactions = async (userId, month, year) => {
     return axios.get(
-        API_BASE_URL + '/report/getTotalNoOfTransactions', 
+        API_BASE_URL + '/report/getTotalNoOfTransactions',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 userId: userId,
                 month: month,
@@ -122,9 +124,9 @@ const getTotalNoOfTransactions = async (userId, month, year) => {
 
 const getTotalByCategory = async (email, categoryId, month, year) => {
     return await axios.get(
-        API_BASE_URL + '/report/getTotalByCategory', 
+        API_BASE_URL + '/report/getTotalByCategory',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 email: email,
                 categoryId: categoryId,
@@ -137,9 +139,9 @@ const getTotalByCategory = async (email, categoryId, month, year) => {
 
 const getMonthlySummary = async (email) => {
     return await axios.get(
-        API_BASE_URL + '/report/getMonthlySummaryByUser', 
+        API_BASE_URL + '/report/getMonthlySummaryByUser',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 email: email,
             }
@@ -149,9 +151,9 @@ const getMonthlySummary = async (email) => {
 
 const getBudget = async (month, year) => {
     return await axios.get(
-        API_BASE_URL + '/budget/get', 
+        API_BASE_URL + '/budget/get',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 userId: AuthService.getCurrentUser().id,
                 month: month,
@@ -163,7 +165,7 @@ const getBudget = async (month, year) => {
 
 const createBudget = (amount) => {
     return axios.post(
-        API_BASE_URL + '/budget/create', 
+        API_BASE_URL + '/budget/create',
         {
             userId: AuthService.getCurrentUser().id,
             amount: amount
@@ -176,17 +178,17 @@ const createBudget = (amount) => {
 
 const uploadProfileImg = async (formData) => {
     return await axios.post(
-        API_BASE_URL + '/user/settings/profileImg', 
+        API_BASE_URL + '/user/settings/profileImg',
         formData,
         {
             headers: AuthService.authHeader(),
-            
+
         }
     )
 }
 const getProfileImg = async () => {
     return await axios.get(
-        API_BASE_URL + '/user/settings/profileImg', 
+        API_BASE_URL + '/user/settings/profileImg',
         {
             headers: AuthService.authHeader(),
             params: {
@@ -198,7 +200,7 @@ const getProfileImg = async () => {
 
 const removeProfileImg = async () => {
     return await axios.delete(
-        API_BASE_URL + '/user/settings/profileImg', 
+        API_BASE_URL + '/user/settings/profileImg',
         {
             headers: AuthService.authHeader(),
             params: {
@@ -208,16 +210,17 @@ const removeProfileImg = async () => {
     )
 }
 
-const createSavedTransaction = (categoryId, amount, description, frequency, upcomingDate) => {
+const createSavedTransaction = (categoryId, amount, description, frequency, upcomingDate, Currency) => {
     return axios.post(
-        API_BASE_URL + '/saved/create', 
+        API_BASE_URL + '/saved/create',
         {
             userId: AuthService.getCurrentUser().id,
             categoryId: categoryId,
-            amount:amount,
-            description:description,
+            amount: amount,
+            description: description,
             frequency: frequency,
-            upcomingDate: upcomingDate
+            upcomingDate: upcomingDate,
+            currency: Currency
         },
         {
             headers: AuthService.authHeader()
@@ -227,9 +230,9 @@ const createSavedTransaction = (categoryId, amount, description, frequency, upco
 
 const getSavedTransactions = () => {
     return axios.get(
-        API_BASE_URL + '/saved/user', 
+        API_BASE_URL + '/saved/user',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 id: AuthService.getCurrentUser().id
             }
@@ -239,9 +242,9 @@ const getSavedTransactions = () => {
 
 const getSavedTransactionById = (id) => {
     return axios.get(
-        API_BASE_URL + '/saved/', 
+        API_BASE_URL + '/saved/',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 id: id
             }
@@ -249,12 +252,12 @@ const getSavedTransactionById = (id) => {
     )
 }
 const updateSavedTransaction = (id, categoryId, amount, description, frequency, upcomingDate) => {
-    return axios.put(API_BASE_URL + '/saved/', 
+    return axios.put(API_BASE_URL + '/saved/',
         {
             userId: AuthService.getCurrentUser().id,
             categoryId: categoryId,
-            amount:amount,
-            description:description,
+            amount: amount,
+            description: description,
             frequency: frequency,
             upcomingDate: upcomingDate
         },
@@ -269,9 +272,9 @@ const updateSavedTransaction = (id, categoryId, amount, description, frequency, 
 
 const deleteSavedTransaction = (id) => {
     return axios.delete(
-        API_BASE_URL + '/saved/', 
+        API_BASE_URL + '/saved/',
         {
-            headers: AuthService.authHeader(), 
+            headers: AuthService.authHeader(),
             params: {
                 id: id
             }
@@ -281,7 +284,7 @@ const deleteSavedTransaction = (id) => {
 
 const addSavedTransaction = (id) => {
     return axios.get(
-        API_BASE_URL + '/saved/add', 
+        API_BASE_URL + '/saved/add',
         {
             headers: AuthService.authHeader(),
             params: {
@@ -293,7 +296,7 @@ const addSavedTransaction = (id) => {
 
 const skipSavedTransaction = (id) => {
     return axios.get(
-        API_BASE_URL + '/saved/skip', 
+        API_BASE_URL + '/saved/skip',
         {
             headers: AuthService.authHeader(),
             params: {
@@ -305,7 +308,7 @@ const skipSavedTransaction = (id) => {
 
 const UserService = {
     get_categories,
-    add_transaction ,
+    add_transaction,
     get_transactions,
     get_single_transaction,
     update_transaction,

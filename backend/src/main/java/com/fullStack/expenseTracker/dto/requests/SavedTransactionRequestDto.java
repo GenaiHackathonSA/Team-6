@@ -24,4 +24,5 @@ public class SavedTransactionRequestDto {
 
     private LocalDate upcomingDate;
 
+    private String currency;
 }

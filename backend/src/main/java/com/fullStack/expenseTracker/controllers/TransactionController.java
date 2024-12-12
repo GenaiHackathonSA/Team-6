@@ -22,8 +22,8 @@ public class TransactionController {
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponseDto<?>> getAllTransactions(@Param("pageNumber") int pageNumber,
-                                                         @Param("pageSize") int pageSize,
-                                                         @Param("searchKey") String searchKey) throws TransactionServiceLogicException {
+                                                                @Param("pageSize") int pageSize,
+                                                                @Param("searchKey") String searchKey) throws TransactionServiceLogicException {
         return transactionService.getAllTransactions(pageNumber, pageSize, searchKey);
     }
 

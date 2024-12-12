@@ -1,3 +1,4 @@
+
 package com.fullStack.expenseTracker.services;
 
 import com.fullStack.expenseTracker.dto.reponses.ApiResponseDto;
@@ -19,7 +20,6 @@ public interface CategoryService {
     Category getCategoryById(int id) throws CategoryNotFoundException;
 
     ResponseEntity<ApiResponseDto<?>> enableOrDisableCategory(int categoryId) throws CategoryServiceLogicException, CategoryNotFoundException;
-
 
     ResponseEntity<ApiResponseDto<?>> createCategory(CategoryRequestDto categoryRequestDto) throws TransactionTypeNotFoundException;
 

@@ -1,3 +1,4 @@
+
 package com.fullStack.expenseTracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,10 +25,10 @@ public class Category {
 
     private boolean enabled;
 
-
     public Category(String categoryName, TransactionType transactionType, boolean enabled) {
         this.categoryName = categoryName;
         this.transactionType = transactionType;
         this.enabled = enabled;
     }
 }
+

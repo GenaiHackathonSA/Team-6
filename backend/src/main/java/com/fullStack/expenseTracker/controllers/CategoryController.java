@@ -1,3 +1,4 @@
+
 package com.fullStack.expenseTracker.controllers;
 
 import com.fullStack.expenseTracker.dto.requests.CategoryRequestDto;
@@ -28,10 +29,11 @@ public class CategoryController {
 
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ApiResponseDto<?>> disableOrEnableCategory(@Param ("categoryId") int categoryId)
+    public ResponseEntity<ApiResponseDto<?>> disableOrEnableCategory(@Param("categoryId") int categoryId)
             throws CategoryServiceLogicException, CategoryNotFoundException {
         return categoryService.enableOrDisableCategory(categoryId);
     }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponseDto<?>> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) throws TransactionTypeNotFoundException {

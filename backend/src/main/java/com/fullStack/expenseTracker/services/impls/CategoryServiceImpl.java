@@ -65,7 +65,6 @@ public class CategoryServiceImpl implements CategoryService {
         );
     }
 
-
     @Override
     public boolean existsCategory(int id) {
         return categoryRepository.existsById(id);
@@ -83,7 +82,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = getCategoryById(categoryId);
 
         try {
-
             category.setEnabled(!category.isEnabled());
             categoryRepository.save(category);
 
@@ -92,10 +90,9 @@ public class CategoryServiceImpl implements CategoryService {
                             ApiResponseStatus.SUCCESS, HttpStatus.OK, "Category has been updated successfully!"
                     )
             );
-        }catch(Exception e) {
+        } catch (Exception e) {
             log.error("Failed to enable/disable category: " + e.getMessage());
             throw new CategoryServiceLogicException("Failed to update category: Try again later!");
         }
     }
-
 }

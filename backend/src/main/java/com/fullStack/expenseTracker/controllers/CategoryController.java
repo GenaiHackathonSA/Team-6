@@ -44,9 +44,4 @@ public class CategoryController {
             throws CategoryNotFoundException, TransactionTypeNotFoundException {
         return categoryService.updateCategory(categoryId, categoryRequestDto);
     }
-
-
-
 }
-
-

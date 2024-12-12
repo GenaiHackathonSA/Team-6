@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import useCategories from "./useCategories";
 import UserService from "../services/userService";
@@ -14,6 +15,7 @@ function useDashboard(currentMonth) {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
 
+    const userCurrency = AuthService.getCurrentUser().preferredCurrency;
 
     const generateTransactionSummary = async () => {
         setIsLoading(true)
@@ -111,8 +113,7 @@ function useDashboard(currentMonth) {
         isLoading,
         isError
     ]
-
-
 }
 
 export default useDashboard;
+

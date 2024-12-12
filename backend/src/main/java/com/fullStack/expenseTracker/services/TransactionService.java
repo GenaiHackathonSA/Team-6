@@ -8,10 +8,12 @@ import com.fullStack.expenseTracker.exceptions.TransactionServiceLogicException;
 import com.fullStack.expenseTracker.exceptions.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 @Service
 public interface TransactionService {
-
 
     ResponseEntity<ApiResponseDto<?>> addTransaction(TransactionRequestDto transactionRequestDto)
             throws UserNotFoundException, CategoryNotFoundException, TransactionServiceLogicException;
@@ -28,4 +30,11 @@ public interface TransactionService {
 
     ResponseEntity<ApiResponseDto<?>> getTransactionsByUser(String email, int pageNumber, int pageSize, String searchKey, String sortField, String sortDirec, String transactionType) throws UserNotFoundException, TransactionServiceLogicException;
 
+    default double convertCurrency(String source, String target, double amount) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8000/convert?source=" + source + "&target=" + target + "&amount=" + amount;
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        Map<String, Object> responseBody = response.getBody();
+        return (double) responseBody.get("converted_amount");
+    }
 }

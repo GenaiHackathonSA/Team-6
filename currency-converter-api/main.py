@@ -40,14 +40,17 @@ async def lifespan(app: FastAPI):
 # Create the FastAPI app with the lifespan context
 app = FastAPI(lifespan=lifespan)
 
+
 @app.get("/currencies", response_model=Dict[str, str])
 async def list_currencies():
     print(app.state.currencies)
     return app.state.currencies
 
+
 @app.get("/conversion-rates", response_model=Dict[str, float])
 async def get_conversion_rates():
     return app.state.conversion_rates
+
 
 @app.get("/convert")
 async def convert_currency(

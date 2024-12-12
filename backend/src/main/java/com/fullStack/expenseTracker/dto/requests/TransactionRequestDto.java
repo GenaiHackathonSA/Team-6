@@ -30,4 +30,7 @@ public class TransactionRequestDto {
     @NotNull(message = "Date is required!")
     private LocalDate date;
 
+    // New field for the user's preferred currency
+    @NotNull(message = "Preferred currency is required!")
+    private String preferredCurrency;
 }

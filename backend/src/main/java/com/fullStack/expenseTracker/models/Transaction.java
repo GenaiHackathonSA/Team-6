@@ -32,6 +32,9 @@ public class Transaction {
     private double amount;
     private LocalDate date;
 
+    // New field to store the converted amount in the base currency (e.g., USD)
+    private double convertedAmount;
+
     public Transaction(User user, Category category, String description, double amount, LocalDate date) {
         this.user = user;
         this.category = category;
@@ -39,6 +42,4 @@ public class Transaction {
         this.amount = amount;
         this.date = date;
     }
-
-
 }

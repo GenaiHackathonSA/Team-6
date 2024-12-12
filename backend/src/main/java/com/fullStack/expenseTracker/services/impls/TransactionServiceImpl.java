@@ -36,6 +36,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    CurrencyConversionService currencyConversionService;
+
     @Override
     public ResponseEntity<ApiResponseDto<?>> addTransaction(TransactionRequestDto transactionRequestDto)
             throws UserNotFoundException, CategoryNotFoundException, TransactionServiceLogicException {
@@ -63,7 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private double convertToBaseCurrency(double amount, String currency) {
         // Fetch conversion rate from Currency Converter API
-        double conversionRate = CurrencyConversionService.getConversionRate(currency, "USD");
+        double conversionRate = currencyConversionService.getConversionRate(currency, "USD");
         return amount * conversionRate;
     }
 
@@ -262,14 +265,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionResponseDtoList.stream().collect(Collectors.groupingBy(t -> {
 
-            if (t.getDate().equals(today)) {
-                return "Today";
-            }else if (t.getDate().equals(yesterday)) {
-                return "Yesterday";
-            }else {
-                return t.getDate().toString();
-            }
-        }))
+                    if (t.getDate().equals(today)) {
+                        return "Today";
+                    }else if (t.getDate().equals(yesterday)) {
+                        return "Yesterday";
+                    }else {
+                        return t.getDate().toString();
+                    }
+                }))
                 .entrySet().stream()
                 .sorted((entry1, entry2 ) -> {
                     if (entry1.getKey().equals("Today")) return -1;

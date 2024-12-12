@@ -1,4 +1,3 @@
-
 package com.fullStack.expenseTracker.services.impls;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @Service
-public class CurrencyConverterService {
+public class CurrencyConversionService {
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public CurrencyConverterService(RestTemplateBuilder restTemplateBuilder) {
+    public CurrencyConversionService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
@@ -23,6 +22,10 @@ public class CurrencyConverterService {
         String url = "http://localhost:8000/convert?source=" + sourceCurrency + "&target=" + targetCurrency + "&amount=1";
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
         Map<String, Object> responseBody = response.getBody();
-        return (double) responseBody.get("converted_amount");
+        if (responseBody != null && responseBody.containsKey("converted_amount")) {
+            return (double) responseBody.get("converted_amount");
+        } else {
+            throw new RuntimeException("Failed to fetch conversion rate");
+        }
     }
 }

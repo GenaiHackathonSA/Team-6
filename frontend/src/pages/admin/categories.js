@@ -7,10 +7,15 @@ import Info from "../../components/utils/Info";
 import Container from "../../components/utils/Container";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast/headless";
+import { useState } from "react";
 
 function AdminCategoriesManagement() {
 
     const [data, isFetching] = useCategories([])
+    const [categoryName, setCategoryName] = useState("");
+    const [transactionTypeId, setTransactionTypeId] = useState(1);
+    const [enabled, setEnabled] = useState(true);
+    const [editingCategory, setEditingCategory] = useState(null);
 
     const disableOrEnable = async (categoryId) => {
         await AdminService.disableOrEnableCategory(categoryId).then(
@@ -25,18 +30,77 @@ function AdminCategoriesManagement() {
         )
     }
 
+    // Highlighted changes start here
+    const handleCreateOrUpdateCategory = async () => {
+        if (editingCategory) {
+            await AdminService.updateCategory(editingCategory.categoryId, categoryName, transactionTypeId, enabled).then(
+                (response) => {
+                    if (response.data.status === 'SUCCESS') {
+                        window.location.reload()
+                    }
+                },
+                (error) => {
+                    toast.error("Failed to update category: Try again later!")
+                }
+            )
+        } else {
+            await AdminService.createCategory(categoryName, transactionTypeId, enabled).then(
+                (response) => {
+                    if (response.data.status === 'SUCCESS') {
+                        window.location.reload()
+                    }
+                },
+                (error) => {
+                    toast.error("Failed to create category: Try again later!")
+                }
+            )
+        }
+    }
+
+    const handleEditCategory = (category) => {
+        setEditingCategory(category);
+        setCategoryName(category.categoryName);
+        setTransactionTypeId(category.transactionType.transactionTypeId);
+        setEnabled(category.enabled);
+    }
+    // Highlighted changes end here
 
     return (
         <Container activeNavId={6}>
             <Header title="Categories" />
-            <Toaster/>
+            <Toaster />
             {(isFetching) && <Loading />}
             {(!isFetching) && (data.length === 0) && <Info text={"No categories found!"} />}
             {(!isFetching) && (data.length !== 0) && (
-                <table>
-                    <CategoriesTableHeader />
-                    <CategoriesTableBody data={data} disableOrEnable={disableOrEnable} />
-                </table>
+                <>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Category Name"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                        />
+                        <select value={transactionTypeId} onChange={(e) => setTransactionTypeId(parseInt(e.target.value))}>
+                            <option value={1}>Expense</option>
+                            <option value={2}>Income</option>
+                        </select>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={enabled}
+                                onChange={(e) => setEnabled(e.target.checked)}
+                            />
+                            Enabled
+                        </label>
+                        <button onClick={handleCreateOrUpdateCategory}>
+                            {editingCategory ? "Update Category" : "Create Category"}
+                        </button>
+                    </div>
+                    <table>
+                        <CategoriesTableHeader />
+                        <CategoriesTableBody data={data} disableOrEnable={disableOrEnable} handleEditCategory={handleEditCategory} />
+                    </table>
+                </>
             )}
         </Container>
     )
@@ -56,7 +120,7 @@ function CategoriesTableHeader() {
     )
 }
 
-function CategoriesTableBody({ data, disableOrEnable }) {
+function CategoriesTableBody({ data, disableOrEnable, handleEditCategory }) {
 
     return (
         data.map((item) => {
@@ -89,7 +153,7 @@ function CategoriesTableBody({ data, disableOrEnable }) {
                                     Enable
                                 </button>)
                         }
-
+                        <button onClick={() => handleEditCategory(item)}>Edit</button>
                     </td>
                 </tr>
             )

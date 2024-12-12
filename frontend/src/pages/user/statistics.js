@@ -13,9 +13,9 @@ function UserStatistics() {
     return (
         <Container activeNavId={9}>
             <Header title="Statistics" />
-            <Toaster/>
+            <Toaster />
             {(isLoading) && <Loading />}
-            {(isError) && toast.error("Failed to fetch information. Try again later!") }
+            {(isError) && toast.error("Failed to fetch information. Try again later!")}
             {(isError) && <Info text="No data found!" />}
             {(!isError) && <IncomeVsExpenseChart data={data} />}
         </Container>

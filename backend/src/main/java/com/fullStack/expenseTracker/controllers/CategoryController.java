@@ -1,5 +1,7 @@
 package com.fullStack.expenseTracker.controllers;
 
+import com.fullStack.expenseTracker.dto.requests.CategoryRequestDto;
+import com.fullStack.expenseTracker.exceptions.TransactionTypeNotFoundException;
 import com.fullStack.expenseTracker.services.CategoryService;
 import com.fullStack.expenseTracker.dto.reponses.ApiResponseDto;
 import com.fullStack.expenseTracker.exceptions.CategoryNotFoundException;
@@ -30,6 +32,20 @@ public class CategoryController {
             throws CategoryServiceLogicException, CategoryNotFoundException {
         return categoryService.enableOrDisableCategory(categoryId);
     }
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponseDto<?>> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) throws TransactionTypeNotFoundException {
+        return categoryService.createCategory(categoryRequestDto);
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponseDto<?>> updateCategory(@RequestParam("categoryId") int categoryId, @RequestBody CategoryRequestDto categoryRequestDto)
+            throws CategoryNotFoundException, TransactionTypeNotFoundException {
+        return categoryService.updateCategory(categoryId, categoryRequestDto);
+    }
+
+
 
 }
 

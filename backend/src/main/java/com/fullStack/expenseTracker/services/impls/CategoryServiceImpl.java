@@ -1,5 +1,7 @@
 package com.fullStack.expenseTracker.services.impls;
 
+import com.fullStack.expenseTracker.dto.requests.CategoryRequestDto;
+import com.fullStack.expenseTracker.exceptions.TransactionTypeNotFoundException;
 import com.fullStack.expenseTracker.services.CategoryService;
 import com.fullStack.expenseTracker.services.TransactionTypeService;
 import com.fullStack.expenseTracker.dto.reponses.ApiResponseDto;
@@ -33,6 +35,36 @@ public class CategoryServiceImpl implements CategoryService {
                 )
         );
     }
+
+    @Override
+    public ResponseEntity<ApiResponseDto<?>> createCategory(CategoryRequestDto categoryRequestDto) throws TransactionTypeNotFoundException {
+        Category category = new Category(
+                categoryRequestDto.getCategoryName(),
+                transactionTypeService.getTransactionById(categoryRequestDto.getTransactionTypeId()),
+                categoryRequestDto.isEnabled()
+        );
+        categoryRepository.save(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponseDto<>(
+                        ApiResponseStatus.SUCCESS, HttpStatus.CREATED, "Category has been created successfully!"
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponseDto<?>> updateCategory(int categoryId, CategoryRequestDto categoryRequestDto) throws CategoryNotFoundException, TransactionTypeNotFoundException {
+        Category category = getCategoryById(categoryId);
+        category.setCategoryName(categoryRequestDto.getCategoryName());
+        category.setTransactionType(transactionTypeService.getTransactionById(categoryRequestDto.getTransactionTypeId()));
+        category.setEnabled(categoryRequestDto.isEnabled());
+        categoryRepository.save(category);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponseDto<>(
+                        ApiResponseStatus.SUCCESS, HttpStatus.OK, "Category has been updated successfully!"
+                )
+        );
+    }
+
 
     @Override
     public boolean existsCategory(int id) {

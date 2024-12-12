@@ -44,7 +44,7 @@ const disableOrEnableUser = (userId) => {
 
 const getAllcategories = () => {
     return axios.get(
-        API_BASE_URL + '/category/getAll', 
+        API_BASE_URL + '/category/getAll',
         {
             headers: AuthService.authHeader()
         }
@@ -53,7 +53,7 @@ const getAllcategories = () => {
 
 const updatecategory = (categoryId, categoryName, transactionTypeId) => {
     return axios.put(
-        API_BASE_URL + '/category/update', 
+        API_BASE_URL + '/category/update',
         {
             categoryName: categoryName,
             transactionTypeId: transactionTypeId
@@ -79,6 +79,36 @@ const disableOrEnableCategory = (categoryId) => {
     )
 }
 
+
+const createCategory = (categoryName, transactionTypeId, enabled) => {
+    return axios.post(
+        API_BASE_URL + '/category/create',
+        {
+            categoryName: categoryName,
+            transactionTypeId: transactionTypeId,
+            enabled: enabled
+        },
+        {
+            headers: AuthService.authHeader()
+        }
+    )
+}
+const updateCategory = (categoryId, categoryName, transactionTypeId, enabled) => {
+    return axios.put(
+        API_BASE_URL + '/category/update',
+        {
+            categoryName: categoryName,
+            transactionTypeId: transactionTypeId,
+            enabled: enabled
+        },
+        {
+            headers: AuthService.authHeader(),
+            params: {
+                categoryId: categoryId
+            }
+        }
+    )
+}
 const AdminService = {
     getAllTransactions,
     getAllUsers,
@@ -86,6 +116,9 @@ const AdminService = {
     getAllcategories,
     updatecategory,
     disableOrEnableCategory,
+    updateCategory,
+    createCategory
+
 }
 
 export default AdminService;

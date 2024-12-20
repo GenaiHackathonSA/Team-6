@@ -29,8 +29,9 @@ function NewTransaction() {
 
     const onSubmit = async (data) => {
         setIsSaving(true)
+        console.log({ data })
         await UserService.add_transaction(
-            AuthService.getCurrentUser().email, data.category, data.description, data.amount, data.date
+            AuthService.getCurrentUser().email, data.category, data.description, data.amount, data.date, data.currency
         ).then(
             (response) => {
                 if (response.data.status === "SUCCESS") {
@@ -41,7 +42,7 @@ function NewTransaction() {
                 error.response ?
                     toast.error(error.response.data.response)
                     :
-                    toast.error("Failed to add transaction: Try again later!" )
+                    toast.error("Failed to add transaction: Try again later!")
             }
         );
         setIsSaving(false);
@@ -51,7 +52,7 @@ function NewTransaction() {
     return (
         <Container activeNavId={2}>
             <Header title="New Transaction" />
-            <Toaster/>
+            <Toaster />
             {(isFetching) && <Loading />}
             {(!isFetching && categories.length === 0) && <Info text="No data found!" />}
             {
